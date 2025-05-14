@@ -1,0 +1,21 @@
+###
+POST http://localhost:5000/register 
+Content-Type: application/json
+
+{
+    "email": "faiz@gmail.com",
+    "password": "12345"
+}
+
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "email": "faiz@gmail.com",
+    "password": "12345"
+}
+
+###
+GET http://localhost:5000/notes
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJmYWl6QGdtYWlsLmNvbSIsInJlZnJlc2hUb2tlbiI6bnVsbCwiaWF0IjoxNzQ3MTg4MTY5LCJleHAiOjE3NDcyNzQ1Njl9.EB2dXX-PfoDf-DWDqNceA4-DiVHNlKesReuG7UPoeDs

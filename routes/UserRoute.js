@@ -1,13 +1,16 @@
 import express from 'express';
-import { getNotes, getByOwner, getById, createNote, updateNote, deleteNote } from '../cotrollers/NoteController.js';
+import { createUser, loginHandler, logout } from "../cotrollers/UserController.js";
+import { refreshToken } from "../cotrollers/RefreshToken.js";
 
 const router = express.Router();
 
-router.get("/notes", getNotes);
-router.get("/notes/:owner", getByOwner);
-router.get("/notes/id/:id", getById);
-router.post("/notes", createNote);
-router.put("/notes/:id", updateNote);
-router.delete("/notes/:id", deleteNote);
+// endpoint untuk akses token
+router.get("/token", refreshToken);
+
+// endpoint untuk auth
+router.post("/login", loginHandler);
+router.delete("/logout", logout);
+
+router.post("/register", createUser);
 
 export default router;

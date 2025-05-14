@@ -1,12 +1,20 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import dotenv from 'dotenv';
+import NoteRoute from './routes/NoteRoute.js';
 import UserRoute from './routes/UserRoute.js';
 
 const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(UserRoute);
+app.set("view engine", "ejs");
 
-app.listen(3001, '0.0.0.0', () => {
-  console.log("Server running...");
-});
+dotenv.config();
+
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: 'http://localhost:5000' }));
+app.use(express.json());
+app.get("/", (req, res) => res.render("index"));
+app.use(UserRoute);
+app.use(NoteRoute);
+
+app.listen(5000, () => console.log("Server connected"));
