@@ -11,10 +11,10 @@ app.set("view engine", "ejs");
 dotenv.config();
 
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: 'http://localhost:5173' }));
+app.use(cors({ credentials: true, origin: true }));
 app.use(express.json());
 app.get("/", (req, res) => res.render("index"));
 app.use(UserRoute);
 app.use(NoteRoute);
 
-app.listen(3007, () => console.log("Server connected"));
+app.listen(3001, () => console.log("Server connected"));
