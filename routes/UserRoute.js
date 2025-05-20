@@ -1,6 +1,7 @@
 import express from 'express';
 import { createUser, loginHandler, logout } from "../cotrollers/UserController.js";
 import { refreshToken } from "../cotrollers/RefreshToken.js";
+import { verifyToken } from "../middleware/verifyToken.js";
 
 const router = express.Router();
 
@@ -11,6 +12,6 @@ router.get("/token", refreshToken);
 router.post("/login", loginHandler);
 router.delete("/logout", logout);
 
-router.post("/register", createUser);
+router.post("/register", verifyToken, createUser);
 
 export default router;

@@ -38,10 +38,10 @@ async function loginHandler(req, res){
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if(isPasswordCorrect) {
           const accessToken = jwt.sign(safeUserData, process.env.ACCESS_TOKEN_SECRET, {
-            expiresIn : '1d' 
+            expiresIn : '8m' 
           });
           const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
-            expiresIn : '1d' 
+            expiresIn : '8m' 
           });
           await User.update({refresh_token:refreshToken},{
             where:{
@@ -70,7 +70,7 @@ async function loginHandler(req, res){
       } else{
         res.status(400).json({
         status: "Failed",
-        message: "Paassword atau email salah",
+        message: "Password atau email salah",
       });
     }
   } catch(error){
