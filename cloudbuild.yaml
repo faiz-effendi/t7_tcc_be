@@ -37,7 +37,7 @@ steps:
         "--image",
         "gcr.io/$PROJECT_ID/t7-tcc-be",
         "--timeout",
-        "3600s",
+        "1000s",
         "--port",
         "3001",
         "--region",
