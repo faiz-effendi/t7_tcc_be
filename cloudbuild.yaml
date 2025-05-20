@@ -39,7 +39,7 @@ steps:
         "--timeout",
         "3600",
         "--port",
-        "3001",
+        "3007",
         "--region",
         "us-central1",
         "--allow-unauthenticated",
