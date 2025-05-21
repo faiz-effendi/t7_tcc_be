@@ -33,7 +33,7 @@ async function loginHandler(req, res){
         // data user dari sequelize itu harus diubah dulu ke bentuk object
         //Safeuserdata dipake biar lebih dinamis, jadi dia masukin semua data user kecuali data-data sensitifnya  karena bisa didecode kayak password caranya gini :
         const userPlain = user.toJSON(); // Konversi ke object
-        const { password: _, refresh_token: __, ...safeUserData } = userPlain;
+        const { password: _, refreshToken: __, ...safeUserData } = userPlain;
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if(isPasswordCorrect) {
@@ -43,7 +43,7 @@ async function loginHandler(req, res){
           const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
             expiresIn : '8m' 
           });
-          await User.update({refresh_token:refreshToken},{
+          await User.update({refreshToken:refreshToken},{
             where:{
               id:user.id
             }
@@ -81,17 +81,17 @@ async function loginHandler(req, res){
   }
 }
 
-async function logout(req,res){
+async function logout(req, res) {
   const refreshToken = req.cookies.refreshToken; //mgecek refresh token sama gak sama di database
   if(!refreshToken) return res.sendStatus(204);
   const user = await User.findOne({
       where:{
-          refresh_token:refreshToken
+          refreshToken:refreshToken
       }
   });
-  if(!user.refresh_token) return res.sendStatus(204);
+  if(!user.refreshToken) return res.sendStatus(204);
   const userId = user.id;
-  await User.update({refresh_token:null},{
+  await User.update({refreshToken:null},{
       where:{
           id:userId
       }
