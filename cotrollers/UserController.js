@@ -83,13 +83,13 @@ async function loginHandler(req, res){
 
 async function logout(req, res) {
   const refreshToken = req.cookies.refreshToken; //mgecek refresh token sama gak sama di database
-  if(!refreshToken) return res.sendStatus(204);
+  if(!refreshToken) return res.sendStatus(204).json({ msg: `refresh tokennya: ${refreshToken}` });
   const user = await User.findOne({
       where:{
           refreshToken:refreshToken
       }
   });
-  if(!user.refreshToken) return res.sendStatus(204);
+  if(!user.refreshToken) return res.sendStatus(204).json({ msg: `refresh tokennya: ${refreshToken}` });
   const userId = user.id;
   await User.update({refreshToken:null},{
       where:{
