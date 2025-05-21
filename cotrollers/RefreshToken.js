@@ -12,13 +12,13 @@ export const refreshToken = async(req, res)=>{
                 refresh_token:refreshToken
             }
         });
-        if(!user.refresh_token) return res.sendStatus(403);
+        if(!user.refreshToken) return res.sendStatus(403);
         else jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET,(err, decoded)=>{
             if(err) return res.sendStatus(403);
             console.log("sudah lewat 403 ke dua di controller")
             const userPlain = user.toJSON(); // Konversi ke object
             const { password: _, refresh_token: __, ...safeUserData } = userPlain;
-            const accessToken = jwt.sign(safeUserData,   process.env.ACCESS_TOKEN_SECRET,{
+            const accessToken = jwt.sign(safeUserData, process.env.ACCESS_TOKEN_SECRET,{
                 expiresIn: '8m'
             });
             res.json({accessToken});

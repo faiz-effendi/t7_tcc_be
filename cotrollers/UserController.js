@@ -43,16 +43,17 @@ async function loginHandler(req, res){
           const refreshToken = jwt.sign(safeUserData, process.env.REFRESH_TOKEN_SECRET, {
             expiresIn : '8m' 
           });
-          await User.update({refreshToken:refreshToken},{
+          await User.update({refreshToken: refreshToken},{
             where:{
-              id:user.id
+              id: user.id
             }
           });
+          res.clearCookie('refreshToken');
           res.cookie('refreshToken', refreshToken,{
-            httpOnly : false, //ngatur cross-site scripting, untuk penggunaan asli aktifkan karena bisa nyegah serangan fetch data dari website "document.cookies"
-              sameSite : 'none',  //ini ngatur domain yg request misal kalo strict cuman bisa akseske link dari dan menuju domain yg sama, lax itu bisa dari domain lain tapi cuman bisa get
-              maxAge  : 24*60*60*1000,
-              secure:true //ini ngirim cookies cuman bisa dari https, kenapa? nyegah skema MITM di jaringan publik, tapi pas development di false in aja
+            httpOnly : true, //ngatur cross-site scripting, untuk penggunaan asli aktifkan karena bisa nyegah serangan fetch data dari website "document.cookies"
+            sameSite : 'lax',  //ini ngatur domain yg request misal kalo strict cuman bisa akseske link dari dan menuju domain yg sama, lax itu bisa dari domain lain tapi cuman bisa get
+            maxAge  : 24*60*60*1000,
+            secure: false //ini ngirim cookies cuman bisa dari https, kenapa? nyegah skema MITM di jaringan publik, tapi pas development di false in aja
           });
           res.status(200).json({
             status: "Success",
@@ -82,22 +83,24 @@ async function loginHandler(req, res){
 }
 
 async function logout(req, res) {
-  const refreshToken = req.cookies.refreshToken; //mgecek refresh token sama gak sama di database
-  if(!refreshToken) return res.status(204).json({ msg: `refresh tokennya: ${refreshToken}` });
+  const refreshToken = req.cookies.refreshToken; //ngecek refresh token sama gak sama di database
+  if(!refreshToken) return res.status(201).json({ message: "Gagal ambil token dari cookie" });
   const user = await User.findOne({
-      where:{
-          refreshToken:refreshToken
-      }
+    where:{
+      refreshToken: refreshToken
+    }
   });
-  if(!user.refreshToken) return res.status(204).json({ msg: `refresh tokennya: ${refreshToken}` });
+
+  if(!user) return res.status(201).json({ message: "Cookie tidak ditemukan di DB" });
+
   const userId = user.id;
   await User.update({refreshToken:null},{
-      where:{
-          id:userId
-      }
+    where:{
+      id:userId
+    }
   });
   res.clearCookie('refreshToken'); //ngehapus cookies yg tersimpan
-  return res.status(200);
+  return res.sendStatus(200);
 }
 
 export { createUser, loginHandler, logout };
