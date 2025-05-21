@@ -83,13 +83,13 @@ async function loginHandler(req, res){
 
 async function logout(req, res) {
   const refreshToken = req.cookies.refreshToken; //mgecek refresh token sama gak sama di database
-  if(!refreshToken) return res.sendStatus(204).json({ msg: `refresh tokennya: ${refreshToken}` });
+  if(!refreshToken) return res.status(204).json({ msg: `refresh tokennya: ${refreshToken}` });
   const user = await User.findOne({
       where:{
           refreshToken:refreshToken
       }
   });
-  if(!user.refreshToken) return res.sendStatus(204).json({ msg: `refresh tokennya: ${refreshToken}` });
+  if(!user.refreshToken) return res.status(204).json({ msg: `refresh tokennya: ${refreshToken}` });
   const userId = user.id;
   await User.update({refreshToken:null},{
       where:{
@@ -97,7 +97,7 @@ async function logout(req, res) {
       }
   });
   res.clearCookie('refreshToken'); //ngehapus cookies yg tersimpan
-  return res.sendStatus(200);
+  return res.status(200);
 }
 
 export { createUser, loginHandler, logout };
